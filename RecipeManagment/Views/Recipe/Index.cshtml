@@ -1,0 +1,47 @@
+﻿@model IEnumerable<RecipeManagment.Models.Recipe>
+@{
+    ViewBag.Title = "Recipe List";
+}
+
+<h2>Recipes</h2>
+
+@using (Html.BeginForm("Index", "Recipe", FormMethod.Get))
+{
+    <div class="form-inline mb-3">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search recipes..." value="@Request.QueryString["searchTerm"]" />
+        <input type="submit" value="Search" class="btn btn-secondary ml-2" />
+        @Html.ActionLink("Create New Recipe", "Create", null, new { @class = "btn btn-primary ml-2" })
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Cuisine Type</th>
+        <th>Preparation Time</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.CuisineType</td>
+            <td>@item.PreparationTimeInMinutes min</td>
+            <td>
+                @if (item.IsFavorite)
+                {<span class="badge bg-warning text-dark">Fav</span>}
+                @if (item.ToTry)
+                {<span class="badge bg-info text-dark">To Try</span>}
+                @if (item.MadeBefore)
+                {<span class="badge bg-success">Made Before</span>}
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
